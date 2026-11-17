@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesplan LP0110 - De voedselketen (online lesfiche)</title>
+  <style>
+    :root {
+      --primary: #2b6cb0;
+      --primary-dark: #2c5282;
+      --accent: #3182ce;
+      --bg-color: #f7fafc;
+      --text-main: #2d3748;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --success: #38a169;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+      @bottom-right {
+        content: "Pagina " counter(page) " van " counter(pages);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 10pt;
+        color: #718096;
+      }
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    /* Web Navigatie & Header (Niet bij print) */
+    .site-nav {
+      background: #1a202c;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .site-title {
+      font-weight: bold;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: #2d3748;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--accent);
+    }
+
+    .action-bar {
+      max-width: 850px;
+      margin: 20px auto 0 auto;
+      padding: 0 15px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 8px 16px;
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-action:hover {
+      background: #2f855a;
+    }
+
+    /* Container & Pagina Layout */
+    .page-container {
+      max-width: 850px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .section-part {
+      background: var(--card-bg);
+      padding: 28px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      margin-bottom: 25px;
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .section-part.hidden-tab {
+      display: none;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--accent), var(--primary-dark));
+      color: white;
+      padding: 18px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      margin: 0 0 4px 0;
+      font-size: 19px;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-info {
+      font-size: 12px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 16px;
+      border-bottom: 2px solid #ebf8ff;
+      padding-bottom: 6px;
+      margin-top: 0;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h3 {
+      font-size: 14px;
+      color: var(--text-main);
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 13.5px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 2px solid #ebf8ff;
+      padding-bottom: 4px;
+    }
+
+    .sub-title-wat {
+      font-weight: bold;
+      color: #2c5282;
+      font-size: 11.5px;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .sub-title-hoe {
+      font-weight: bold;
+      color: #276749;
+      font-size: 11.5px;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      margin-top: 8px;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin-bottom: 5px;
+      widows: 3;
+      orphans: 3;
+    }
+
+    .schema-card {
+      background: #ebf8ff;
+      border: 2px dashed var(--accent);
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 14px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .schema-flow {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-weight: bold;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .schema-box {
+      background: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1px solid #bee3f8;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 12px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 7px 9px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f7fafc;
+      color: #4a5568;
+    }
+
+    .badge {
+      background-color: var(--border-color);
+      color: var(--text-main);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .voorkennis-card {
+      background-color: #f0fff4;
+      border: 1px solid #c6f6d5;
+    }
+
+    .voorkennis-card .card-title {
+      color: #276749;
+      border-bottom-color: #c6f6d5;
+    }
+
+    .alert-card {
+      background-color: #fffaf0;
+      border-left: 4px solid #dd6b20;
+    }
+
+    .alert-card .card-title {
+      color: #dd6b20;
+      border-bottom-color: #feebc8;
+    }
+
+    .example-box {
+      background-color: #edf2f7;
+      border-left: 3px solid #4a5568;
+      padding: 8px 12px;
+      font-style: italic;
+      margin: 6px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Stijl voor downloadknoppen en links in bijlagen */
+    .download-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .download-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f7fafc;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .download-btn {
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .download-btn:hover {
+      background: var(--primary);
+    }
+
+    /* Print Optimalisatie */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .site-nav, .action-bar {
+        display: none !important;
+      }
+      .section-part {
+        display: block !important;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin-bottom: 0;
+      }
+      .card, table, .schema-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      h2, h3, .card-title {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Website Navigatie -->
+  <nav class="site-nav">
+    <div class="site-title">
+      LP0110: De voedselketen (digibord & lesfiche)
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-btn active" onclick="switchTab('all', this)">Alles tonen</button>
+      <button class="nav-btn" onclick="switchTab('part1', this)">1. Lesfiche</button>
+      <button class="nav-btn" onclick="switchTab('part2', this)">2. Lesopbouw</button>
+      <button class="nav-btn" onclick="switchTab('part3', this)">3. Trainen & lensen</button>
+      <button class="nav-btn" onclick="switchTab('part4', this)">4. Achtergrond</button>
+      <button class="nav-btn" onclick="switchTab('part5', this)">5. Bijlagen</button>
+    </div>
+  </nav>
+
+  <!-- Actie knop voor printen -->
+  <div class="action-bar">
+    <button class="btn-action" onclick="window.print()">Afdrukken / opslaan als pdf</button>
+  </div>
+
+  <div class="page-container">
+
+    <!-- ================= DEEL 1: SAMENVATTENDE LESFICHE ================= -->
+    <div class="section-part" id="part1">
+      <h2>Deel 1: Samenvattende lesfiche</h2>
+      
+      <div class="header">
+        <h1>Didactische fiche: de voedselketen</h1>
+        <div class="meta-info">
+          <strong>Vakdiscipline:</strong> Wetenschap & techniek (ecologie) &nbsp;|&nbsp; 
+          <strong>Lessenreeks:</strong> Voedselrelaties &nbsp;|&nbsp;
+          <strong>Doelgroep:</strong> 7–8 jaar (2e leerjaar)
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <!-- Voorkennis -->
+        <div class="card voorkennis-card">
+          <div class="card-title">Voorkennis van de leerlingen</div>
+          <ul>
+            <li><span class="badge">WT.123</span> Beschrijven een eenvoudige voedselketen (lineaire reeks).</li>
+            <li><span class="badge">WT.124</span> Tekenen een voedselketen.</li>
+            <li>Weten dat dieren planten of andere dieren eten.</li>
+          </ul>
+        </div>
+
+        <!-- Kinddoelen -->
+        <div class="card">
+          <div class="card-title">Kinddoelen (ik-doelen)</div>
+          <ul>
+            <li><strong>Van plant tot roofdier:</strong> Ik weet dat planten het begin zijn en voedselketens eindigen bij een roofdier.</li>
+            <li><strong>Terugzoeken:</strong> Ik kan vanaf een roofdier (via sporen zoals braakballen) terugzoeken naar een plant.</li>
+            <li><strong>Tekenen & lezen:</strong> Ik kan een voedselketen tekenen en de pijlen correct lezen als "... wordt gegeten door ...".</li>
+          </ul>
+        </div>
+
+        <!-- Leerplandoelen -->
+        <div class="card">
+          <div class="card-title">Leerplandoelen (GO!)</div>
+          <ul>
+            <li><span class="badge">WT.123</span> Beschrijven een eenvoudige voedselketen.</li>
+            <li><span class="badge">WT.124</span> Tekenen een voedselketen.</li>
+            <li><span class="badge">WT.133</span> Tonen hun kennis over de voedselkringloop in verschillende contexten.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Visueel Kernschema -->
+      <div class="schema-card">
+        <div style="font-weight: bold; color: #2b6cb0; font-size: 13px; margin-bottom: 4px;">Visueel kernschema (richting van de pijl)</div>
+        <div class="schema-flow">
+          <div class="schema-box">Graan<br><small>(plant / start)</small></div>
+          <div class="arrow">➔</div>
+          <div class="schema-box">Veldmuis<br><small>(prooi)</small></div>
+          <div class="arrow">➔</div>
+          <div class="schema-box">Kerkuil<br><small>(roofdier / einde)</small></div>
+        </div>
+        <div style="font-size: 11.5px; color: #4a5568; margin-top: 6px; font-style: italic;">
+          Leeswijze pijl: "Het graan ➔ wordt gegeten door ➔ de veldmuis ➔ wordt gegeten door ➔ de kerkuil."
+        </div>
+      </div>
+
+      <!-- Lesopbouw tabel -->
+      <div class="card">
+        <div class="card-title">Lesopbouw en lesinhoud</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">Fase</th>
+              <th style="width: 10%;">Tijd</th>
+              <th>Inhoud & didactische aanpak</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Verkennen</strong></td>
+              <td>10 min</td>
+              <td><strong>Sporen onderzoeken:</strong> Analyseren van gesteriliseerde uilenbraakballen met pincet en loep. Ontdekken wat een roofdier at om de onderzoeksvraag te formuleren.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Kern / instructie</strong></td>
+              <td>10 min</td>
+              <td><strong>Modelleren:</strong> Aanleren van het stappenplan om vanaf het roofdier (de uil of vos) achterwaarts terug te zoeken naar de plant.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Terugkoppelen</strong></td>
+              <td>5 min</td>
+              <td><strong>Bordschema (EDI):</strong> Verschillende ketens (akker, bos, vijver) vergelijken in kolommen: begin (plant), midden (eters), einde (roofdier).</td>
+            </tr>
+            <tr>
+              <td><strong>4. Begeleid inoefenen</strong></td>
+              <td>12 min</td>
+              <td><strong>Groepswerk met infokaartjes:</strong> Starten bij een roofdierkaart (torenvalk, sperwer, reiger) en terugzoeken tot een plant op een A3-blad.</td>
+            </tr>
+            <tr>
+              <td><strong>5. Kleine lesafsluiting</strong></td>
+              <td>5 min</td>
+              <td><strong>Formatieve check:</strong> Vingers opsteken bij een fout genummerde voedselketen op het bord en de kernzin herhalen.</td>
+            </tr>
+            <tr>
+              <td><strong>6. Zelfstandige verwerking</strong></td>
+              <td>13 min</td>
+              <td><strong>Werkblad:</strong> Voedselketen van de buizerd terugzoeken en toepassen op de praktijkvraag over de boerderij en de kerkuilenkast.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Materialen & Veiligheid -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Materialen & opstelling</div>
+          <ul>
+            <li>Gesteriliseerde braakballen van kerkuilen, pincetten, loepen, wegwerphandschoenen.</li>
+            <li>Roofdierkaarten en infokaartjes per groepje (A3-blad).</li>
+            <li>Individuele werkbladen en onthoudboekjes.</li>
+          </ul>
+        </div>
+
+        <div class="card alert-card">
+          <div class="card-title">Veiligheid & hygiëne</div>
+          <ul>
+            <li><strong>Handen wassen:</strong> Na het onderzoeken van braakballen of sporen altijd grondig de handen wassen met zeep.</li>
+            <li><strong>Wandeling (optioneel):</strong> Blijf op het pad en raak geen dode dieren of keutels rechtstreeks aan.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ================= DEEL 2: UITGESCHREVEN LESOPBOUW ================= -->
+    <div class="section-part" id="part2">
+      <h2>
+        Deel 2: Uitgeschreven lesopbouw (inhoud & didactiek)
+      </h2>
+
+      <!-- Voorkennis -->
+      <div class="card">
+        <div class="card-title">Voorkennis activeren (voorfase)</div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Activeren van de basiskennis rond eenvoudige voedselketens (WT.123, WT.124): lineaire voorstelling waarin elk organisme gegeten wordt door het volgende.</li>
+          <li>Besef dat voedselketens starten bij een plant en bijna altijd eindigen bij een roofdier.</li>
+          <li>Inzicht in de gevolgen wanneer een schakel in de keten verandert (bijv. minder sprinkhanen in een natte zomer).</li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>ABC-kaartjes:</strong> Geef leerlingen kaartjes A, B en C. Stel meerkeuzevragen (bijv. <em>"Waar begint een voedselketen?"</em>). Iedereen steekt gelijktijdig zijn kaartje omhoog en legt de keuze uit.</li>
+          <li><strong>Teken en vergelijk:</strong> Laat leerlingen in 2 minuten uit het hoofd een voedselketen tekenen en in duo's controleren of de plant vooraan staat en de pijlen kloppen.</li>
+          <li><strong>Een natte zomer:</strong> Teken <code>gras → sprinkhaan → kikker → reiger</code> op het bord en laat duo's bespreken wat er gebeurt als er minder sprinkhanen zijn.</li>
+        </ul>
+      </div>
+
+      <!-- Stap 1 -->
+      <div class="card">
+        <div class="card-title">
+          Stap 1: Verkennen (10 min)
+        </div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Ontdekken dat je via achtergelaten sporen in de natuur (zoals uilenballen of botjes) kunt achterhalen wie welk dier heeft gegeten.</li>
+          <li>Formuleren van de onderzoeksvraag: <em>Hoe vinden we vanaf een roofdier de hele voedselketen terug tot aan het begin?</em></li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>Doeloriëntatie / belang:</strong> Speel een geluidsfragment af van een roepende kerkuil en toon een foto van een uilenkast in een schuur. Vraag: <em>"Waarom hangt een boer zo'n kast op?"</em> Leg de link naar muizen op de akker.</li>
+          <li><strong>Sporen onderzoeken (onderzoekend leren):</strong> Geef groepjes een gesteriliseerde braakbal, pincetten en een loep. Laat ze de botjes en schedeltjes sorteren en vergelijken met een zoekkaart. Vertel pas daarna dat de uil dit uitbraakt en formuleer samen de onderzoeksvraag.</li>
+        </ul>
+      </div>
+
+      <!-- Stap 2 -->
+      <div class="card">
+        <div class="card-title">
+          Stap 2: Voorkeursinstructie (10 min)
+        </div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Aanleren van het stappenplan om een voedselketen op te bouwen <strong>vanaf het roofdier achterwaarts</strong>:
+            <ol>
+              <li>Start bij het roofdier.</li>
+              <li>Vraag telkens: wat eet dit dier?</li>
+              <li>Stop bij een plant (want die eet niets op).</li>
+              <li>Teken de keten van links naar rechts (van plant naar roofdier) met pijlen naar wie eet.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>Modeling (hardop denken):</strong> Hang rechts op het bord een foto van een kerkuil. Denk hardop: 
+            <div class="example-box">
+              "Ik begin bij het roofdier, de uil. Wat at de uil? Een veldmuis. (Hang veldmuis links). Wat at de veldmuis? Graankorrels en zaden. (Hang graanaar links). Het graan is een plant; die eet niets op, hier stopt ons spoor en hier begint de voedselketen.<br>
+              Nu teken ik de pijl van links naar rechts: <em>graan → veldmuis → kerkuil</em>. De pijl wijst altijd naar wie eet: het graan <strong>wordt gegeten door</strong> de veldmuis."
+            </div>
+          </li>
+          <li>Oefen dit in met een tweede voorbeeld (<code>eikenblad → rups → mus → vos</code>).</li>
+        </ul>
+      </div>
+
+      <!-- Stap 3 -->
+      <div class="card">
+        <div class="card-title">
+          Stap 3: Terugkoppelen (5 min)
+        </div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Verschillende voedselketens (akker, tuin, bos) naast elkaar leggen om te zien dat elke keten start bij een plant en eindigt bij een roofdier.</li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>EDI (bordschema):</strong> Hang de gekende keten <code>gras → konijn → vos</code> naast de akker- en tuinketen. Vraag: <em>"Wat is hetzelfde en wat is anders?"</em></li>
+          <li>Bouw een bordschema op met drie kolommen: <strong>Het begin</strong> (een plant), <strong>Het midden</strong> (eters) en <strong>Het einde</strong> (roofdier). Laat leerlingen hardop voorlezen met de vaste formulering <em>"wordt gegeten door"</em>.</li>
+        </ul>
+      </div>
+
+      <!-- Stap 4 -->
+      <div class="card">
+        <div class="card-title">
+          Stap 4: Begeleid inoefenen (12 min)
+        </div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Vanaf een roofdier een voedselketen terugzoeken, selecteren uit infokaartjes, tekenen en voorstellen.</li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>Groepswerk (2 à 3 leerlingen):</strong> Geef elk groepje een roofdierkaart van een specifieke omgeving (bijv. duinen: torenvalk; bos: sperwer; vijver: reiger) en een stapel infokaartjes (waarvan sommige er niet bij passen).</li>
+          <li>Opdracht: Start bij het roofdier, zoek terug tot een plant en teken de keten op een A3-blad.</li>
+          <li><strong>Coaching leerkracht:</strong> Stel sturende vragen: <em>"Wat eet jullie roofdier volgens het kaartje?"</em>, <em>"Waarom stoppen jullie hier?"</em> en <em>"Naar wie wijst deze pijl?"</em></li>
+        </ul>
+      </div>
+
+      <!-- Stap 5 -->
+      <div class="card">
+        <div class="card-title">
+          Stap 5: Kleine lesafsluiting (5 min)
+        </div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Individueel en snel nagaan of leerlingen een fout in een getekende voedselketen herkennen.</li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>Formatief evalueren met vingers:</strong> Teken op het bord een foutieve keten: <code>1 eikenblad → 2 rups → 3 sperwer → 4 koolmees</code>.</li>
+          <li>Vraag: <em>"Welke twee organismen moeten van plaats wisselen? Toon hun nummers met je vingers."</em> (3 en 4)</li>
+          <li>Sluit af met de kernzin in koor: <em>"Elk organisme wordt gegeten door het volgende. Wie terugzoekt vanaf het roofdier, komt bij een plant uit."</em></li>
+        </ul>
+      </div>
+
+      <!-- Stap 6 -->
+      <div class="card">
+        <div class="card-title">
+          Stap 6: Zelfstandige verwerking & vastlegging (13 min)
+        </div>
+        
+        <div class="sub-title-wat">Inhoud (wat?)</div>
+        <ul>
+          <li>Zelfstandig een voedselketen terugzoeken en tekenen vanaf de buizerd.</li>
+          <li>De opgedane kennis toepassen op de praktische situatie van de boerderij en de kerkuilenkast.</li>
+        </ul>
+
+        <div class="sub-title-hoe">Didactiek (hoe?)</div>
+        <ul>
+          <li><strong>Individueel werkblad:</strong> Leerlingen krijgen een blad met de buizerd en infozinnen om de keten te tekenen en op te lossen waarom boer Jan een uilenkast ophangt.</li>
+          <li><strong>Vastlegging:</strong> 
+            <br>• <em>W&T-muur:</em> Hang de 4 stappen van het stappenplan op met foto's van de omgevingen en de getekende ketens van de groepjes.
+            <br>• <em>Onthoudboekje:</em> Leerlingen tekenen het stappenplan en de akkerketen in hun persoonlijk schrift.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- ================= DEEL 3: EXTRA MATERIAAL ================= -->
+    <div class="section-part" id="part3">
+      <h2>Deel 3: Extra materiaal (trainen & denklenzen)</h2>
+
+      <div class="card">
+        <div class="card-title">Trainen (oefenactiviteiten voor de klas)</div>
+        <ul>
+          <li><strong>Wie hoort er niet bij?:</strong> Toon 5 prenten door elkaar (bijv. eikenblad, rups, mossel, mus, vos). Leerlingen ontdekken welke er niet thuishoort en leggen de overige in de juiste volgorde.</li>
+          <li><strong>De langste voedselketen:</strong> Groepjes krijgen 12 kaartjes uit wei en sloot en moeten de langste verantwoorde keten leggen en voorlezen.</li>
+          <li><strong>Speuren in het informatieve boek:</strong> Duo's zoeken in boeken op wat een specifiek dier (egel, ijsvogel, merel) eet en zoeken zo terug naar een plant.</li>
+          <li><strong>Voedselketenkwartet:</strong> Kwartetspel spelen waarbij kaarten gevraagd worden door de voedselrelatie te omschrijven (bijv. <em>"Mag ik het organisme dat de rups eet?"</em>).</li>
+          <li><strong>Twee omgevingen, twee voedselketens:</strong> Teken uit het geheugen twee ketens van verschillende omgevingen, omcirkel de plant groen en het roofdier rood, en vergelijk.</li>
+          <li><strong>Meer of minder?:</strong> Groepjes krijgen situatiekaarten (bijv. <em>"Weinig kikkers aan de vijver"</em>), tekenen de keten en geven met duimen omhoog/omlaag aan welk dier meer of minder voedsel vindt.</li>
+          <li><strong>Sporen in de duinen:</strong> Zoek op foto's of tijdens een wandeling naar sporen (keutels, afgegraasd gras) en reconstrueer de duinen-voedselketen.</li>
+          <li><strong>Quizkaarten door elkaar:</strong> Trek willekeurige quizkaarten uit een doos en laat de klas het antwoord op wisbordjes noteren.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Denklenzen (voorbeeldvragen voor dieper inzicht)</div>
+        <ul>
+          <li><strong>Lens systemen en modellen:</strong>
+            <br>• <em>Wat kun je uit een braakbal afleiden over het voedsel van de kerkuil, en wat niet over de hele keten?</em>
+            <br>• <em>Wat is hetzelfde aan de voedselketens van de akker, het bos en de duinen?</em>
+          </li>
+          <li><strong>Lens niveaus en dimensies:</strong>
+            <br>• <em>Hoeveel pijlen tel je in de voedselketen van het bos en hoeveel in die van de akker? Waarom verschilt dat?</em>
+          </li>
+          <li><strong>Lens perspectieven:</strong>
+            <br>• <em>Hoe kijkt een boer naar de kerkuil en hoe kijkt een veldmuis ernaar?</em>
+            <br>• <em>Een klasgenoot zegt: "De sprinkhaan heeft sterke springpoten, dus hij staat achteraan in de voedselketen." Wat antwoord jij?</em>
+          </li>
+          <li><strong>Lens dynamiek:</strong>
+            <br>• <em>Wat gebeurt er met de kerkuil in een jaar met heel weinig veldmuizen?</em>
+            <br>• <em>Wat gebeurt er met de vijverketen als de vijver in de zomer bijna uitdroogt?</em>
+          </li>
+          <li><strong>Lens duurzame toekomst:</strong>
+            <br>• <em>Wat gebeurt er met de kerkuil als een boer gif strooit tegen de muizen, en hoe kan dat zonder gif?</em>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- ================= DEEL 4: ACHTERGRONDINFO & KADER ================= -->
+    <div class="section-part" id="part4">
+      <h2>Deel 4: Achtergrondinfo, leerplandoelen & samenhang</h2>
+
+      <div class="card">
+        <div class="card-title">Wat moet de leraar weten? (inhoudelijke achtergrond)</div>
+        
+        <h3>1. De voedselketen & opbouw</h3>
+        <p>Een voedselketen is een lineaire voorstelling van organismen waarin elk organisme gegeten wordt door het volgende. Ze begint meestal bij een plant (producent) en eindigt bij een roofdier. <strong>Belangrijk:</strong> De pijl wijst altijd van wat gegeten wordt naar wie eet (<code>graan → veldmuis → kerkuil</code>). De plaats in de keten hangt af van de relatie, niet van grootte of kracht (een sprinkhaan is sterk, maar wordt gegeten door een kikker).</p>
+        
+        <h3>2. Sporen en braakballen</h3>
+        <p>Voedselketens steunen op waarnemingen. Uilen slikken prooien in hun geheel door; haren en botjes worden na enkele uren uitgebraakt als een compacte <strong>braakbal</strong>. Een braakbal toont wat het roofdier at (bijv. muizenschedeltjes), maar toont niet wat die prooi zelf at (daarvoor is een planten-schakel nodig).</p>
+      </div>
+
+      <div class="card alert-card">
+        <div class="card-title">Misconcepties & correcties</div>
+        <ul>
+          <li><strong>Misconcept 1:</strong> <em>"Een braakbal is uilenpoep / alleen uilen maken braakballen."</em>
+            <br>➔ <em>Correctie:</em> Het is een uitgebraakt balletje van onverteerbare resten via de snavel. Ook reigers, meeuwen en roofvogels maken braakballen.
+          </li>
+          <li><strong>Misconcept 2:</strong> <em>"In de braakbal zitten muizenbotjes, dus de keten begint bij de muis."</em>
+            <br>➔ <em>Correctie:</em> De muis at graan of zaden; de keten begint altijd bij een plant.
+          </li>
+          <li><strong>Misconcept 3:</strong> <em>"Muizen eten kaas."</em>
+            <br>➔ <em>Correctie:</em> Veldmuizen eten in de natuur zaden, graankorrels en grassen (het kaasverhaal komt uit tekenfilms).
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Leerplandoelen & samenhang (GO! leerplan)</div>
+        <ul>
+          <li><strong>Leerplandoelen:</strong>
+            <br>• <span class="badge">WT.123</span> [begrijpen] Beschrijven een eenvoudige voedselketen.
+            <br>• <span class="badge">WT.124</span> [gebruiken] Tekenen een voedselketen.
+            <br>• <span class="badge">WT.133</span> [engageren] Tonen hun kennis over de voedselkringloop in verschillende contexten.
+          </li>
+          <li><strong>Diploma:</strong> <em>De ecoloog (7-8 jaar)</em> - Deelconcept: energiebronnen, energiestromen en relaties tussen organismen.</li>
+          <li><strong>Verticale samenhang:</strong> Onderdeel van de lessenlijn <em>Ecologie</em> en lessenreeks <em>Voedselrelaties</em>.</li>
+          <li><strong>Leren leren:</strong> <span class="badge">LL.048</span> Herkennen cognitieve strategieën om informatie te verwerven en te verwerken.</li>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- ================= DEEL 5: BIJLAGEN ================= -->
+    <div class="section-part" id="part5">
+      <h2>Deel 5: Bijlagen (downloads en online oefeningen)</h2>
+
+      <div class="card">
+        <div class="card-title">Documenten en werkbladen (downloads)</div>
+        <ul class="download-list">
+          <li class="download-item">
+            <span>Werkblad voedselketen</span>
+            <a href="bijlagen/Werkblad-voedselketen.pdf" class="download-btn" download>Download</a>
+          </li>
+          <li class="download-item">
+            <span>Foto uil in schuur</span>
+            <a href="bijlagen/Foto-uil-schuur.pdf" class="download-btn" download>Download</a>
+          </li>
+          <li class="download-item">
+            <span>Foto uil braakbal</span>
+            <a href="bijlagen/Foto-uil-braakbal.pdf" class="download-btn" download>Download</a>
+          </li>
+          <li class="download-item">
+            <span>Foto voedselketen</span>
+            <a href="bijlagen/Foto-voedselketen.pdf" class="download-btn" download>Download</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Online oefeningen (Wordwall)</div>
+        <ul class="download-list">
+          <li class="download-item">
+            <span>Wordwall oefening 1</span>
+            <a href="https://wordwall.net/play/124053/181/377" class="download-btn" target="_blank">Open oefening</a>
+          </li>
+          <li class="download-item">
+            <span>Wordwall oefening 2</span>
+            <a href="https://wordwall.net/play/124053/422/118" class="download-btn" target="_blank">Open oefening</a>
+          </li>
+          <li class="download-item">
+            <span>Wordwall oefening 3</span>
+            <a href="https://wordwall.net/play/124053/740/443" class="download-btn" target="_blank">Open oefening</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript voor Interactiviteit -->
+  <script>
+    // Tabblad Navigatie
+    function switchTab(partId, btn) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const parts = ['part1', 'part2', 'part3', 'part4', 'part5'];
+      parts.forEach(id => {
+        const el = document.getElementById(id);
+        if (partId === 'all' || id === partId) {
+          el.classList.remove('hidden-tab');
+        } else {
+          el.classList.add('hidden-tab');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
