@@ -112,6 +112,110 @@
       background: #2f855a;
     }
 
+    /* Printkeuze venster */
+    .print-picker-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 32, 44, 0.55);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .print-picker-overlay.open {
+      display: flex;
+    }
+
+    .print-picker-modal {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 440px;
+      padding: 20px 22px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .print-picker-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 6px 0;
+    }
+
+    .print-picker-sub {
+      font-size: 12px;
+      color: #4a5568;
+      margin: 0 0 14px 0;
+    }
+
+    .print-checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .print-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      background: #f7fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .print-helper-links {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .print-helper-links button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .print-picker-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      background: #edf2f7;
+      color: var(--text-main);
+      border: 1px solid #cbd5e0;
+      padding: 7px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12.5px;
+    }
+
+    .btn-confirm-print {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 12.5px;
+    }
+
     /* Container & Pagina Layout */
     .page-container {
       max-width: 850px;
@@ -367,7 +471,7 @@
         background: white;
         padding: 0;
       }
-      .site-nav, .action-bar {
+      .site-nav, .action-bar, .print-picker-overlay {
         display: none !important;
       }
       .section-part {
@@ -376,6 +480,9 @@
         border: none;
         padding: 0;
         margin-bottom: 0;
+      }
+      .section-part.skip-print {
+        display: none !important;
       }
       .card, table, .schema-card {
         break-inside: avoid;
@@ -407,7 +514,48 @@
 
   <!-- Actie knop voor printen -->
   <div class="action-bar">
-    <button class="btn-action" onclick="window.print()">Afdrukken / opslaan als pdf</button>
+    <button class="btn-action" onclick="openPrintPicker()">Afdrukken / opslaan als pdf</button>
+  </div>
+
+  <!-- Keuzevenster voor afdrukken -->
+  <div class="print-picker-overlay" id="printPickerModal" onclick="handleOverlayClick(event)">
+    <div class="print-picker-modal">
+      <div class="print-picker-title">Kies welke onderdelen je wilt afprinten</div>
+      <p class="print-picker-sub">Vink de gewenste onderdelen aan en klik daarna op afdrukken.</p>
+
+      <div class="print-checkbox-list">
+        <label class="print-checkbox-item">
+          <input type="checkbox" class="print-part-cb" value="part1" checked>
+          <span>1. Samenvattende lesfiche</span>
+        </label>
+        <label class="print-checkbox-item">
+          <input type="checkbox" class="print-part-cb" value="part2" checked>
+          <span>2. Uitgeschreven lesopbouw</span>
+        </label>
+        <label class="print-checkbox-item">
+          <input type="checkbox" class="print-part-cb" value="part3" checked>
+          <span>3. Extra materiaal (trainen & denklenzen)</span>
+        </label>
+        <label class="print-checkbox-item">
+          <input type="checkbox" class="print-part-cb" value="part4" checked>
+          <span>4. Achtergrondinfo, leerplandoelen & samenhang</span>
+        </label>
+        <label class="print-checkbox-item">
+          <input type="checkbox" class="print-part-cb" value="part5" checked>
+          <span>5. Bijlagen</span>
+        </label>
+      </div>
+
+      <div class="print-helper-links">
+        <button type="button" onclick="setAllPrintCheckboxes(true)">Alles selecteren</button>
+        <button type="button" onclick="setAllPrintCheckboxes(false)">Alles deselecteren</button>
+      </div>
+
+      <div class="print-picker-actions">
+        <button type="button" class="btn-secondary" onclick="closePrintPicker()">Annuleren</button>
+        <button type="button" class="btn-confirm-print" onclick="executeSelectedPrint()">Afdrukken</button>
+      </div>
+    </div>
   </div>
 
   <div class="page-container">
@@ -846,6 +994,68 @@
           el.classList.add('hidden-tab');
         }
       });
+    }
+
+    // Printkeuze openen en sluiten
+    function openPrintPicker() {
+      const visibleParts = document.querySelectorAll('.section-part:not(.hidden-tab)');
+      const visibleIds = Array.from(visibleParts).map(el => el.id);
+      const checkboxes = document.querySelectorAll('.print-part-cb');
+
+      if (visibleIds.length > 0 && visibleIds.length < 5) {
+        checkboxes.forEach(cb => {
+          cb.checked = visibleIds.includes(cb.value);
+        });
+      } else {
+        checkboxes.forEach(cb => {
+          cb.checked = true;
+        });
+      }
+
+      document.getElementById('printPickerModal').classList.add('open');
+    }
+
+    function closePrintPicker() {
+      document.getElementById('printPickerModal').classList.remove('open');
+    }
+
+    function handleOverlayClick(event) {
+      if (event.target.id === 'printPickerModal') {
+        closePrintPicker();
+      }
+    }
+
+    function setAllPrintCheckboxes(checked) {
+      document.querySelectorAll('.print-part-cb').forEach(cb => {
+        cb.checked = checked;
+      });
+    }
+
+    function executeSelectedPrint() {
+      const selectedIds = Array.from(document.querySelectorAll('.print-part-cb:checked')).map(cb => cb.value);
+
+      if (selectedIds.length === 0) {
+        alert("Selecteer minstens één onderdeel om af te printen.");
+        return;
+      }
+
+      const allParts = document.querySelectorAll('.section-part');
+      allParts.forEach(part => {
+        if (selectedIds.includes(part.id)) {
+          part.classList.remove('skip-print');
+        } else {
+          part.classList.add('skip-print');
+        }
+      });
+
+      closePrintPicker();
+
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+          allParts.forEach(part => part.classList.remove('skip-print'));
+        }, 300);
+      }, 100);
     }
   </script>
 </body>
